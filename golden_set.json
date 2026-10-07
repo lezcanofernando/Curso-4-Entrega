@@ -1,0 +1,22 @@
+[
+  {
+    "pregunta": "¿Hasta qué temperatura se pueden recibir los lácteos?",
+    "documento_id_esperado": "01_recepcion_mercaderia.md"
+  },
+  {
+    "pregunta": "¿Qué es una merma y dónde se registra?",
+    "documento_id_esperado": "02_reposicion_y_stock.md"
+  },
+  {
+    "pregunta": "¿Cuánto efectivo puede retirar un cliente con cash back?",
+    "documento_id_esperado": "03_cajas_y_atencion.md"
+  },
+  {
+    "pregunta": "¿Cuál es el teléfono 0800 de atención al cliente?",
+    "documento_id_esperado": "03_cajas_y_atencion.md"
+  },
+  {
+    "pregunta": "Me lastimé en el trabajo, ¿a quién tengo que avisar y qué hace la ART?",
+    "documento_id_esperado": "04_personal_y_seguridad.md"
+  }
+]

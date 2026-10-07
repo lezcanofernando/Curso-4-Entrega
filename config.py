@@ -1,27 +1,34 @@
-"""Configuración compartida entre ingest.py y rag_chain.py.
+"""Configuración compartida por todos los scripts."""
 
-Los dos archivos usan get_embeddings() de acá, así siempre se usa el mismo modelo
-de embeddings para indexar y para consultar.
-"""
+import os
 
-from langchain_huggingface import HuggingFaceEmbeddings
+from dotenv import load_dotenv
+from langchain_pinecone import PineconeEmbeddings
+
+load_dotenv()  # lee PINECONE_API_KEY, ANTHROPIC_API_KEY e INDEX_NAME del archivo .env
 
 DATA_DIR = "data"
-VECTORSTORE_DIR = "vectorstore"
-COLLECTION_NAME = "supermercado_docs"
+INDEX_NAME = os.getenv("INDEX_NAME", "supermercado-docs")
+NAMESPACE = "procedimientos"  # separa estos documentos de otros datos del mismo índice
 
-# Modelo de embeddings local, gratis y multilingüe. Acepta textos de hasta 512 tokens.
-EMBEDDING_MODEL = "intfloat/multilingual-e5-small"
+# Modelo de embeddings alojado en Pinecone: multilingüe y sin necesidad de otra API key.
+# Genera vectores de 1024 dimensiones, así que el índice se crea con esa dimensión.
+EMBEDDING_MODEL = "multilingual-e5-large"
+DIMENSION = 1024
 
-CHUNK_SIZE = 500    # tokens por fragmento
-CHUNK_OVERLAP = 50  # tokens que se repiten entre un fragmento y el siguiente
-TOP_K = 4           # fragmentos que se le pasan al LLM
+CHUNK_SIZE = 1000    # caracteres por fragmento (~250 tokens)
+CHUNK_OVERLAP = 150  # caracteres que se repiten entre un fragmento y el siguiente
+TOP_K = 5            # documentos que devuelve el recuperador
+
+# Etiqueta de categoría de cada documento (se guarda en la metadata).
+CATEGORIAS = {
+    "01_recepcion_mercaderia.md": "logistica",
+    "02_reposicion_y_stock.md": "stock",
+    "03_cajas_y_atencion.md": "atencion_cliente",
+    "04_personal_y_seguridad.md": "recursos_humanos",
+}
 
 
 def get_embeddings():
-    # El modelo e5 espera "passage: " delante de los documentos y "query: " delante de las preguntas.
-    return HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL,
-        encode_kwargs={"prompt": "passage: ", "normalize_embeddings": True},
-        query_encode_kwargs={"prompt": "query: ", "normalize_embeddings": True},
-    )
+    # La ingesta y la consulta usan esta misma función, así siempre se usa el mismo modelo.
+    return PineconeEmbeddings(model=EMBEDDING_MODEL)

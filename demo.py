@@ -1,8 +1,6 @@
 """Pruebas: una pregunta con respuesta en los documentos y dos preguntas trampa."""
 
-import asyncio
-
-from rag_chain import get_rag_response
+from rag_system import RAGSystem
 
 preguntas = [
     # 1. La respuesta está en 01_recepcion_mercaderia.md.
@@ -13,12 +11,7 @@ preguntas = [
     "¿Quién ganó el Mundial de fútbol de 2022?",
 ]
 
-
-async def main():
-    for pregunta in preguntas:
-        resultado = await get_rag_response(pregunta)
-        print(f"\nPregunta: {pregunta}")
-        print(resultado.model_dump_json(indent=2))
-
-
-asyncio.run(main())
+rag = RAGSystem()
+for pregunta in preguntas:
+    print(f"\nPregunta: {pregunta}")
+    print(rag.responder(pregunta).model_dump_json(indent=2))
