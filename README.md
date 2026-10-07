@@ -104,14 +104,26 @@ python demo.py              # preguntas de prueba con respuestas de Claude
 
 ## Resultados de la evaluación
 
-> Completar con la salida de `python evaluate.py`.
+Salida de `python evaluate.py`:
+
+| Pregunta | Documento esperado | Recall@5 | Precision@5 | Máximo posible |
+|---|---|---|---|---|
+| ¿Hasta qué temperatura se pueden recibir los lácteos? | `01_recepcion_mercaderia.md` | 1 | 0,40 | 0,60 |
+| ¿Qué es una merma y dónde se registra? | `02_reposicion_y_stock.md` | 1 | 0,20 | 0,60 |
+| ¿Cuánto efectivo puede retirar un cliente con cash back? | `03_cajas_y_atencion.md` | 1 | 0,60 | 0,60 |
+| ¿Cuál es el teléfono 0800 de atención al cliente? | `03_cajas_y_atencion.md` | 1 | 0,40 | 0,60 |
+| Me lastimé en el trabajo, ¿a quién tengo que avisar y qué hace la ART? | `04_personal_y_seguridad.md` | 1 | 0,60 | 0,80 |
 
 ```text
 === Resumen ===
 Preguntas evaluadas: 5
-Recall@5 promedio:    ...
-Precision@5 promedio: ...
+Recall@5 promedio:    1.00
+Precision@5 promedio: 0.44
 ```
+
+- **Recall@5 = 1,00**: en las 5 preguntas, el documento correcto aparece entre los 5 fragmentos recuperados. Además, en todas aparece **primero**.
+- **Precision@5 = 0,44**: hay que compararla con el máximo posible, que es **0,64** en promedio (los documentos tienen 3 o 4 fragmentos, así que los 5 recuperados nunca pueden ser todos del mismo documento). El recuperador logra cerca del 70 % de ese máximo. En la pregunta del cash back llega al máximo.
+- La precisión más baja es la de "merma" (0,20): la palabra solo aparece en un fragmento, y los otros puestos los ocupan fragmentos que hablan de temas parecidos (productos, encargado, planillas).
 
 ## Seguridad
 
